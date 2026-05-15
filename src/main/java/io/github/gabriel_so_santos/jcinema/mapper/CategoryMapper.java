@@ -1,0 +1,22 @@
+package io.github.gabriel_so_santos.jcinema.mapper;
+
+import io.github.gabriel_so_santos.jcinema.controller.request.CategoryRequest;
+import io.github.gabriel_so_santos.jcinema.controller.response.CategoryResponse;
+import io.github.gabriel_so_santos.jcinema.entity.Category;
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class CategoryMapper {
+    public Category toCategory(CategoryRequest request) {
+        return Category.builder()
+                .name(request.name())
+                .build();
+    }
+
+    public CategoryResponse toCategoryResponse(Category category) {
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build();
+    }
+}
