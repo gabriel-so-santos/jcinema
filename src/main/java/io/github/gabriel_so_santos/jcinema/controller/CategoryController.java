@@ -6,6 +6,8 @@ import io.github.gabriel_so_santos.jcinema.entity.Category;
 import io.github.gabriel_so_santos.jcinema.mapper.CategoryMapper;
 import io.github.gabriel_so_santos.jcinema.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,29 +20,37 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<CategoryResponse> getAll(){
-        List<Category> categories = categoryService.findAll();
-
-        return categories.stream()
+    public ResponseEntity<List<CategoryResponse>> getAll() {
+        List<CategoryResponse> categories = categoryService.findAll()
+                .stream()
                 .map(CategoryMapper::toCategoryResponse)
                 .toList();
+
+        return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{id}")
-    public CategoryResponse getById(@PathVariable Long id){
-        Optional<Category> category = categoryService.findById(id);
-        return category.map(CategoryMapper::toCategoryResponse)
-                .orElse(null);
+    public ResponseEntity<CategoryResponse> getById(@PathVariable Long id) {
+        return categoryService.findById(id)
+                .map(CategoryMapper::toCategoryResponse)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public CategoryResponse save(@RequestBody CategoryRequest request){
-        Category category = CategoryMapper.toCategory(request);
-        return CategoryMapper.toCategoryResponse(categoryService.save(category));
+    public ResponseEntity<CategoryResponse> save(@RequestBody CategoryRequest request) {
+        Category newCategory = CategoryMapper.toCategory(request);
+
+        CategoryResponse response = CategoryMapper.toCategoryResponse(
+                categoryService.save(newCategory)
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id){
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         categoryService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
