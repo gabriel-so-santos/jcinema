@@ -9,8 +9,8 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name="category")
-public class Category {
+@Table(name="movie_category")
+public class MovieCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
