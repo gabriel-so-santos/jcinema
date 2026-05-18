@@ -3,13 +3,13 @@ package io.github.gabriel_so_santos.jcinema.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
+@Table(name = "streaming_platform")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name="streaming_platform")
 public class StreamingPlatform {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
