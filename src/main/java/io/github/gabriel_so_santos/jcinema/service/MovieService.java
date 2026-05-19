@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MovieService {
-    private MovieRepository movieRepository;
+    private final MovieRepository movieRepository;
 
     public List<Movie> findAll() {
         return movieRepository.findAll();
